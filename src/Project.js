@@ -10,8 +10,14 @@ export class Project extends Component {
 
     componentDidMount() {
         fetch('http://localhost:8080/project/' + this.props.projectId)
-            .then(result => result.json())
-            .then(project => this.setState({project}));
+            .then(result => {
+                if (!result.ok) {
+                    throw Error(result.statusText);
+                }
+                return result.json()
+            })
+            .then(project => this.setState({project}))
+            .catch((error) => console.log(error));
     }
 
     render() {

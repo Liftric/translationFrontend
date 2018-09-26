@@ -68,24 +68,24 @@ class ProjectList extends Component {
                 <table>
                     <thead>
                     <tr>
-                        <th>Name</th>
                         <th>IsoCode</th>
+                        <th>Name</th>
                     </tr>
                     </thead>
                     <tbody>
                     {this.state.languages.map(language =>
                         <tr key={language.IsoCode}>
-                            <td>{language.Name}</td>
                             <td>{language.IsoCode}</td>
+                            <td>{language.Name}</td>
                         </tr>
                     )}
                     </tbody>
                 </table>
                 <div>
                     <form onSubmit={this.handleSubmit}>
-                        <input type="text" name="name" value={this.state.name} onChange={this.handleChange}/>
-                        <input type="text" name="languageCode" value={this.state.languageCode}
-                               onChange={this.handleChange}/>
+                        Name: <input type="text" name="name" value={this.state.name} onChange={this.handleChange}/>
+                        Iso-Code: <input type="text" name="languageCode" value={this.state.languageCode}
+                                         onChange={this.handleChange}/>
                         <input type="submit"/>
                     </form>
                 </div>
