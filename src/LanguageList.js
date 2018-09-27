@@ -83,9 +83,10 @@ class ProjectList extends Component {
                 </table>
                 <div>
                     <form onSubmit={this.handleSubmit}>
-                        Name: <input type="text" name="name" value={this.state.name} onChange={this.handleChange}/>
+                        Name: <input type="text" name="name" value={this.state.name} onChange={this.handleChange}
+                                     required/>
                         Iso-Code: <input type="text" name="languageCode" value={this.state.languageCode}
-                                         onChange={this.handleChange}/>
+                                         onChange={this.handleChange} required/>
                         <input type="submit"/>
                     </form>
                 </div>

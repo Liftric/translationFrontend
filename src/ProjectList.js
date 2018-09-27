@@ -6,13 +6,12 @@ class ProjectList extends Component {
         super();
         this.state = {
             projects: [],
-            languages: [],
-            baseLanguage: '',
-            projectName: ''
+            languages: []
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        this.baseLanguageSelect = React.createRef();
+        this.nameInput = React.createRef();
     }
 
     componentDidMount() {
@@ -41,15 +40,6 @@ class ProjectList extends Component {
             .catch((error) => console.log(error));
     }
 
-    handleChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
-        this.setState({
-            [name]: value
-        });
-    }
 
     handleSubmit(event) {
         this.newProject();
@@ -58,8 +48,8 @@ class ProjectList extends Component {
 
     newProject() {
         var body = {
-            "baseLanguageCode": this.state.baseLanguage,
-            "name": this.state.projectName
+            "baseLanguageCode": this.baseLanguageSelect.current.value,
+            "name": this.nameInput.current.value
         };
         console.log(JSON.stringify(body));
         fetch('http://localhost:8080/project', {
@@ -108,8 +98,8 @@ class ProjectList extends Component {
                 </table>
                 <div>
                     <form onSubmit={this.handleSubmit}>
-                        <input type="text" name="projectName" onChange={this.handleChange}/>
-                        <select value={this.state.value} onChange={this.handleChange} name="baseLanguage">
+                        <input type="text" name="projectName" ref={this.nameInput} required/>
+                        <select value={this.state.value} ref={this.baseLanguageSelect} name="baseLanguage" required>
                             {this.state.languages.map(language =>
                                 <option key={language.IsoCode} value={language.IsoCode}>
                                     {language.IsoCode} - {language.Name}
