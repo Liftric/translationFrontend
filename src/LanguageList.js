@@ -64,7 +64,7 @@ class ProjectList extends Component {
 
     render() {
         return (
-            <div className="ProjectList">
+            <div className="LanguageList" id="languageList">
                 <table>
                     <thead>
                     <tr>
