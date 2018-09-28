@@ -1,5 +1,7 @@
 import {Component} from "react";
 import React from "react";
+import ReactDOM from "react-dom";
+import Project from "./Project"
 
 class ProjectList extends Component {
     constructor() {
@@ -51,7 +53,6 @@ class ProjectList extends Component {
             "baseLanguageCode": this.baseLanguageSelect.current.value,
             "name": this.nameInput.current.value
         };
-        console.log(JSON.stringify(body));
         fetch('http://localhost:8080/project', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
@@ -74,6 +75,16 @@ class ProjectList extends Component {
             })
     }
 
+    navigateToProject(id) {
+        var temp = document.createElement("div");
+        ReactDOM.render(<Project projectId={id}/>, temp);
+        var container = document.getElementById("content");
+        container.childNodes.forEach(function (child) {
+            container.removeChild(child);
+        });
+        container.appendChild(temp.querySelector("#project"));
+    }
+
     render() {
         return (
             <div className="ProjectList" id="projectList">
@@ -87,11 +98,10 @@ class ProjectList extends Component {
                     </thead>
                     <tbody>
                     {this.state.projects.map(project =>
-                        <tr key={project.Id} id={project.Id}>
+                        <tr key={project.Id} id={project.Id} onClick={this.navigateToProject.bind(this, project.Id)}>
                             <td>{project.Name}</td>
                             <td>{project.BaseLanguage.Name}</td>
-                            <td>{project.Languages.map(language => language.Name
-                            )}</td>
+                            <td>{project.Languages.map(language => language.Name)}</td>
                         </tr>
                     )}
                     </tbody>
