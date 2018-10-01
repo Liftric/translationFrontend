@@ -1,12 +1,14 @@
 import {Component} from "react";
 import React from "react";
+import ReactDOM from "react-dom";
+import StringList from "./StringList";
 
 
 export class Project extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            project: {},
+            project: {Languages: [], BaseLanguage: {}, Identifiers: []},
             newIdentifier: ''
         };
 
@@ -41,6 +43,16 @@ export class Project extends Component {
         })
     }
 
+    showLanguage(lang) {
+        var temp = document.createElement("div");
+        ReactDOM.render(<StringList project={this.state.project} language={lang}/>, temp);
+        var container = document.getElementById("content");
+        container.childNodes.forEach(function (child) {
+            container.removeChild(child);
+        });
+        container.appendChild(temp.querySelector("#stringList"));
+    }
+
     componentDidMount() {
         fetch('http://localhost:8080/project/' + this.props.projectId)
             .then(result => {
@@ -56,7 +68,24 @@ export class Project extends Component {
     render() {
         return (
             <div className="Project" id="project">
-                {this.state.project.Name}
+                {this.state.project.Name} <br/>
+                BaseLanguage: {this.state.project.BaseLanguage.IsoCode} - {this.state.project.BaseLanguage.Name} <br/>
+                Languages:
+                <ul className="Languages">
+                    {this.state.project.Languages.map(language =>
+                        <li key={language.IsoCode} onClick={this.showLanguage.bind(this, language.IsoCode)}>
+                            {language.IsoCode} - {language.Name}
+                        </li>
+                    )}
+                </ul><br/>
+                Identifiers:
+                <ul className="Identifiers">
+                    {this.state.project.Identifiers.map(identifier =>
+                        <li key={identifier.Id}>
+                            {identifier.Identifier}
+                        </li>
+                    )}
+                </ul>
                 <form onSubmit={this.handleSubmit}>
                     New Identifier: <input type="text" name="newIdentifier" value={this.state.newIdentifier}
                                            onChange={this.handleChange} required/>
