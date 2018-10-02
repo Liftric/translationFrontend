@@ -1,6 +1,6 @@
 import {Component} from "react";
 import React from "react";
-
+import String from "./String"
 /**
  * @return {string}
  */
@@ -14,29 +14,7 @@ function TranslationLanguage(props) {
     return ""
 }
 
-/**
- * @return {string}
- */
-function String(props) {
-    if (props.identifier.Translations == null) {
-        return ""
-    }
-    for (var i = 0; i < props.identifier.Translations.length; i++) {
-        let translation = props.identifier.Translations[i];
-        if (translation.Language === props.language) {
-            return translation.Translation
-        }
-    }
-    return ""
-}
-
 class StringList extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {
-    }
 
     render() {
         return (
@@ -46,18 +24,15 @@ class StringList extends Component {
                     <tr>
                         <th>Identifier</th>
                         <th>String {this.props.project.BaseLanguage.Name}</th>
+                        <th>Approved</th>
+                        <th>Improvement needed</th>
                         <th>Translation <TranslationLanguage project={this.props.project}
                                                              language={this.props.language}/></th>
                     </tr>
                     </thead>
                     <tbody>
                     {this.props.project.Identifiers.map(identifier =>
-                        <tr key={identifier.Id}>
-                            <td>{identifier.Identifier}</td>
-                            <td><String language={this.props.project.BaseLanguage.IsoCode} identifier={identifier}/>
-                            </td>
-                            <td><String language={this.props.language} identifier={identifier}/></td>
-                        </tr>
+                        <String identifier={identifier} language={this.props.language} baseLanguage={this.props.project.BaseLanguage.IsoCode}/>
                     )}
                     </tbody>
                 </table>
