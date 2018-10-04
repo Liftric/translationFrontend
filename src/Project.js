@@ -9,11 +9,15 @@ export class Project extends Component {
         super(props);
         this.state = {
             project: {Languages: [], BaseLanguage: {}, Identifiers: []},
-            newIdentifier: ''
+            newIdentifier: '',
+            languages: []
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleLanguageSubmit = this.handleLanguageSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+
+        this.languageSelect = React.createRef();
     }
 
     handleChange(event) {
@@ -31,6 +35,30 @@ export class Project extends Component {
         this.newIdentifier();
     }
 
+    handleLanguageSubmit(event) {
+        event.preventDefault();
+        console.log("language added")
+        var body = {
+            "languageCode": this.languageSelect.current.value
+        };
+        fetch('http://localhost:8080/project/' + this.props.projectId + '/languages', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(body)
+        })
+            .then(result => {
+                if (!result.ok) {
+                    throw Error(result.statusText);
+                }
+                return result.json()
+            })
+            .then(project => {
+                this.setState({project});
+                this.setState({languages: this.diffLanguages(this.state.languages)});
+            })
+            .catch((error) => console.log(error));
+    }
+
     newIdentifier() {
         var body = {
             "projectId": this.props.projectId,
@@ -41,6 +69,18 @@ export class Project extends Component {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(body)
         })
+            .then(result => {
+                if (!result.ok) {
+                    throw Error(result.statusText);
+                }
+                return result.json()
+            })
+            .then(identifier => {
+                var updatedProject = this.state.project;
+                updatedProject.Identifiers.push(identifier);
+                this.setState({project: updatedProject})
+            })
+            .catch((error) => console.log(error));
     }
 
     showLanguage(lang) {
@@ -61,8 +101,43 @@ export class Project extends Component {
                 }
                 return result.json()
             })
-            .then(project => this.setState({project}))
+            .then(project => {
+                this.setState({project});
+                this.fetchLanguages();
+            })
             .catch((error) => console.log(error));
+    }
+
+    fetchLanguages() {
+        fetch('http://localhost:8080/languages')
+            .then(result => {
+                if (!result.ok) {
+                    throw Error(result.statusText);
+                }
+                return result.json();
+            })
+            .then(languages => {
+                this.setState({languages: this.diffLanguages(languages)});
+            })
+            .catch((error) => console.log(error));
+    }
+
+    diffLanguages(languages) {
+        var diff = [];
+        var langKeys = [];
+        var projLangKeys = [];
+        for (var i = 0; i < languages.length; i++) {
+            langKeys.push(languages[i].IsoCode)
+        }
+        for (var j = 0; j < this.state.project.Languages.length; j++) {
+            projLangKeys.push(this.state.project.Languages[j].IsoCode);
+        }
+        for (var k = 0; k < languages.length; k++) {
+            if (!projLangKeys.includes(langKeys[k])) {
+                diff.push(languages[k])
+            }
+        }
+        return diff;
     }
 
     render() {
@@ -91,6 +166,18 @@ export class Project extends Component {
                                            onChange={this.handleChange} required/>
                     <input type="submit"/>
                 </form>
+                <div>
+                    <form onSubmit={this.handleLanguageSubmit}>
+                        <select value={this.state.value} ref={this.languageSelect} name="language" required>
+                            {this.state.languages.map(language =>
+                                <option key={language.IsoCode} value={language.IsoCode}>
+                                    {language.IsoCode} - {language.Name}
+                                </option>
+                            )}
+                        </select>
+                        <button onClick={this.handleLanguageSubmit}>Add language to project</button>
+                    </form>
+                </div>
             </div>
         );
     }
