@@ -1,6 +1,7 @@
 import {Component} from "react";
 import React from "react";
 import String from "./String"
+import ImportFile from "./ImportFile"
 /**
  * @return {string}
  */
@@ -19,6 +20,7 @@ class StringList extends Component {
     render() {
         return (
             <div className="StringList" id="stringList">
+                <ImportFile projectId={this.props.project.Id} languageCode={this.props.language} />
                 <table>
                     <thead>
                     <tr>
@@ -32,7 +34,7 @@ class StringList extends Component {
                     </thead>
                     <tbody>
                     {this.props.project.Identifiers.map(identifier =>
-                        <String identifier={identifier} language={this.props.language} baseLanguage={this.props.project.BaseLanguage.IsoCode}/>
+                        <String key={identifier.Id} identifier={identifier} language={this.props.language} baseLanguage={this.props.project.BaseLanguage.IsoCode}/>
                     )}
                     </tbody>
                 </table>

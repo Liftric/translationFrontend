@@ -70,15 +70,6 @@ class String extends Component {
         return null;
     }
 
-
-    string() {
-        var translation = translation();
-        if (translation) {
-            return translation.Translation
-        }
-        return ""
-    }
-
     handleTranslationChange(event) {
         const target = event.target;
         const value = target.value;
