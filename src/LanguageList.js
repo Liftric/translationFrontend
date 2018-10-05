@@ -15,7 +15,7 @@ class ProjectList extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/languages')
+        fetch(process.env.REACT_APP_BACKEND_URL + '/languages')
             .then(result => result.json())
             .then(languages => this.setState({languages}));
     }
@@ -40,7 +40,7 @@ class ProjectList extends Component {
             "languageCode": this.state.languageCode,
             "name": this.state.name
         };
-        fetch('http://localhost:8080/language', {
+        fetch(process.env.REACT_APP_BACKEND_URL + '/language', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(body)

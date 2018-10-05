@@ -2,6 +2,12 @@
 
 Small frontend for the translation api 2 written in react.js.
 
+## Environment variables
+
+You need to specify the following environment variables to get this project running (also for development):
+
+* REACT_APP_BACKEND_URL
+
 ## Available Scripts
 
 In the project directory, you can run:

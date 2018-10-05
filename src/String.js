@@ -86,7 +86,7 @@ class String extends Component {
             "languageCode": this.state.language
         };
         console.log(body)
-        fetch('http://localhost:8080/translation', {
+        fetch(process.env.REACT_APP_BACKEND_URL + '/translation', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(body)

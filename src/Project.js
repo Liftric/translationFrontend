@@ -41,7 +41,7 @@ export class Project extends Component {
         var body = {
             "languageCode": this.languageSelect.current.value
         };
-        fetch('http://localhost:8080/project/' + this.props.projectId + '/languages', {
+        fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.props.projectId + '/languages', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(body)
@@ -64,7 +64,7 @@ export class Project extends Component {
             "projectId": this.props.projectId,
             "identifier": this.state.newIdentifier
         };
-        fetch('http://localhost:8080/identifier', {
+        fetch(process.env.REACT_APP_BACKEND_URL + '/identifier', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(body)
@@ -94,7 +94,7 @@ export class Project extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/project/' + this.props.projectId)
+        fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.props.projectId)
             .then(result => {
                 if (!result.ok) {
                     throw Error(result.statusText);
@@ -109,7 +109,7 @@ export class Project extends Component {
     }
 
     fetchLanguages() {
-        fetch('http://localhost:8080/languages')
+        fetch(process.env.REACT_APP_BACKEND_URL + '/languages')
             .then(result => {
                 if (!result.ok) {
                     throw Error(result.statusText);

@@ -22,7 +22,7 @@ class ImportFile extends Component {
         let file = event.target.files[0];
         fd.append('file', file);
 
-        fetch('http://localhost:8080/project/' + this.props.projectId + '/android/' + this.props.languageCode, {
+        fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.props.projectId + '/android/' + this.props.languageCode, {
             method: 'POST',
             body: file
         })
@@ -65,7 +65,7 @@ class ImportFile extends Component {
                         "projectId": projectId,
                         "identifier": diff.Identifier
                     };
-                    fetch('http://localhost:8080/identifier', {
+                    fetch(process.env.REACT_APP_BACKEND_URL + '/identifier', {
                         method: 'PUT',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify(body)
@@ -97,7 +97,7 @@ class ImportFile extends Component {
             "languageCode": this.props.languageCode
         };
         console.log(body)
-        fetch('http://localhost:8080/translation', {
+        fetch(process.env.REACT_APP_BACKEND_URL + '/translation', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(body)
