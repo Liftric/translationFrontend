@@ -100,12 +100,6 @@ class String extends Component {
                 }
                 return result.json()
             })
-            .then(result => {
-                this.state.languages.push(result);
-                this.setState({
-                    "languages": this.state.languages
-                });
-            })
             .catch((error) => {
                 console.log(error)
             });

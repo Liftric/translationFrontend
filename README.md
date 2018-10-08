@@ -6,7 +6,7 @@ Small frontend for the translation api 2 written in react.js.
 
 You need to specify the following environment variables to get this project running (also for development):
 
-* REACT_APP_BACKEND_URL
+* REACT_APP_BACKEND_URL (for development use "http://localhost:8080")
 
 ## Available Scripts
 

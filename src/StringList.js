@@ -22,25 +22,49 @@ function TranslationLanguage(props) {
 }
 
 class StringList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            projectId: props.match.params.id,
+            language: props.match.params.language,
+            project: {Languages: [], BaseLanguage: {}, Identifiers: []}
+        };
+        console.log("stringlist");
+
+    }
+
+    componentDidMount() {
+        fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId)
+            .then(result => {
+                if (!result.ok) {
+                    throw Error(result.statusText);
+                }
+                return result.json()
+            })
+            .then(project => {
+                this.setState({project});
+            })
+            .catch((error) => console.log(error));
+    }
 
     render() {
         return (
             <div className="StringList" id="stringList">
-                <ImportFile projectId={this.props.project.Id} languageCode={this.props.language} />
+                <ImportFile projectId={this.state.project.Id} languageCode={this.state.language} />
                 <Table>
                     <TableHead>
                     <TableRow>
                         <TableCell>Identifier</TableCell>
-                        <TableCell>String {this.props.project.BaseLanguage.Name}</TableCell>
+                        <TableCell>String {this.state.project.BaseLanguage.Name}</TableCell>
                         <TableCell>Approved</TableCell>
                         <TableCell>Improvement needed</TableCell>
-                        <TableCell>Translation <TranslationLanguage project={this.props.project}
-                                                             language={this.props.language}/></TableCell>
+                        <TableCell>Translation <TranslationLanguage project={this.state.project}
+                                                             language={this.state.language}/></TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                    {this.props.project.Identifiers.map(identifier =>
-                        <String key={identifier.Id} identifier={identifier} language={this.props.language} baseLanguage={this.props.project.BaseLanguage.IsoCode}/>
+                    {this.state.project.Identifiers.map(identifier =>
+                        <String key={identifier.Id} identifier={identifier} language={this.state.language} baseLanguage={this.state.project.BaseLanguage.IsoCode}/>
                     )}
                     </TableBody>
                 </Table>

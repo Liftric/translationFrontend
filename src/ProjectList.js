@@ -1,7 +1,5 @@
 import {Component} from "react";
 import React from "react";
-import ReactDOM from "react-dom";
-import Project from "./Project"
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,6 +11,7 @@ import Select from "@material-ui/core/Select/Select";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import CustomTableCell from "./styles";
+import {Redirect} from "react-router-dom";
 
 
 class ProjectList extends Component {
@@ -22,7 +21,9 @@ class ProjectList extends Component {
             projects: [],
             languages: [],
             baseLanguage: "",
-            projectName: ""
+            projectName: "",
+            redirect: false,
+            projectId: 0
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -93,16 +94,17 @@ class ProjectList extends Component {
     }
 
     navigateToProject(id) {
-        var temp = document.createElement("div");
-        ReactDOM.render(<Project projectId={id}/>, temp);
-        var container = document.getElementById("content");
-        container.childNodes.forEach(function (child) {
-            container.removeChild(child);
+        this.setState({
+            redirect: true,
+            projectId: id
         });
-        container.appendChild(temp.querySelector("#project"));
     }
 
     render() {
+        if (this.state.redirect) {
+            let url = '/project/' + this.state.projectId;
+            return <Redirect push to={url} />;
+        }
         return (
             <div className="ProjectList" id="projectList">
                 <Table>

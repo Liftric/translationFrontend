@@ -1,22 +1,24 @@
 import {Component} from "react";
 import React from "react";
-import ReactDOM from "react-dom";
-import StringList from "./StringList";
 import ProjectTable from "./ProjectTable";
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import {Redirect} from "react-router-dom";
 
 
 export class Project extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            projectId: props.match.params.id,
             project: {Languages: [], BaseLanguage: {}, Identifiers: []},
             newIdentifier: '',
-            languages: []
+            languages: [],
+            languageTo: "",
+            redirect: false
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -47,7 +49,7 @@ export class Project extends Component {
         var body = {
             "languageCode": this.languageSelect.current.value
         };
-        fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.props.projectId + '/languages', {
+        fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/languages', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(body)
@@ -67,7 +69,7 @@ export class Project extends Component {
 
     newIdentifier() {
         var body = {
-            "projectId": this.props.projectId,
+            "projectId": this.state.projectId,
             "identifier": this.state.newIdentifier
         };
         fetch(process.env.REACT_APP_BACKEND_URL + '/identifier', {
@@ -90,17 +92,14 @@ export class Project extends Component {
     }
 
     showLanguage(lang) {
-        var temp = document.createElement("div");
-        ReactDOM.render(<StringList project={this.state.project} language={lang}/>, temp);
-        var container = document.getElementById("content");
-        container.childNodes.forEach(function (child) {
-            container.removeChild(child);
+        this.setState({
+            redirect: true,
+            languageTo: lang
         });
-        container.appendChild(temp.querySelector("#stringList"));
     }
 
     componentDidMount() {
-        fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.props.projectId)
+        fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId)
             .then(result => {
                 if (!result.ok) {
                     throw Error(result.statusText);
@@ -147,9 +146,13 @@ export class Project extends Component {
     }
 
     render() {
+        if (this.state.redirect) {
+            let url = '/project/' + this.state.projectId + "/" + this.state.languageTo;
+            return <Redirect push to={url} />;
+        }
         return (
             <div className="Project" id="project">
-                {this.state.project.Name} <br/>
+                <h1>{this.state.project.Name}</h1>
                 BaseLanguage: {this.state.project.BaseLanguage.IsoCode} - {this.state.project.BaseLanguage.Name} <br/>
                 Languages:
                 <List className="Languages">
