@@ -52,9 +52,6 @@ class ProjectTable extends Component {
             identifier.NewIdentififer = identifier.Identifier;
             identifier.Changed = false;
         });
-        this.state = {
-            project: project
-        };
         this.setState({
             project: project
         });

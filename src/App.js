@@ -4,7 +4,7 @@ import ProjectList from './ProjectList'
 import LanguageList from './LanguageList'
 import ReactDOM from "react-dom";
 import Button from '@material-ui/core/Button';
-
+import Grid from "@material-ui/core/Grid/Grid";
 
 
 class App extends Component {
@@ -31,15 +31,19 @@ class App extends Component {
 
     render() {
         return (
-                <div className="App">
-                    <div className="Navigation">
-                        <Button onClick={this.showProjectList}>Projectlist</Button>
-                        <Button onClick={this.showLanguages}>Edit languages</Button>
+            <Grid container spacing={40} style={{padding: 20}}>
+                <Grid item xs={12}>
+                    <div className="App">
+                        <div className="Navigation">
+                            <Button onClick={this.showProjectList}>Projectlist</Button>
+                            <Button onClick={this.showLanguages}>Edit languages</Button>
+                        </div>
+                        <div className="Content" id="content">
+                            <ProjectList/>
+                        </div>
                     </div>
-                    <div className="Content" id="content">
-                        <ProjectList/>
-                    </div>
-                </div>
+                </Grid>
+            </Grid>
         );
     }
 }

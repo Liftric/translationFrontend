@@ -3,10 +3,10 @@ import React from "react";
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Input from '@material-ui/core/Input';
+import CustomTableCell from "./styles";
 
 class ProjectList extends Component {
     constructor() {
@@ -75,15 +75,15 @@ class ProjectList extends Component {
                 <Table>
                     <TableHead>
                     <TableRow>
-                        <TableCell>IsoCode</TableCell>
-                        <TableCell>Name</TableCell>
+                        <CustomTableCell>IsoCode</CustomTableCell>
+                        <CustomTableCell>Name</CustomTableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
                     {this.state.languages.map(language =>
                         <TableRow key={language.IsoCode}>
-                            <TableCell>{language.IsoCode}</TableCell>
-                            <TableCell>{language.Name}</TableCell>
+                            <CustomTableCell>{language.IsoCode}</CustomTableCell>
+                            <CustomTableCell>{language.Name}</CustomTableCell>
                         </TableRow>
                     )}
                     </TableBody>

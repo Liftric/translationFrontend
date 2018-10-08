@@ -5,22 +5,28 @@ import Project from "./Project"
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Input from '@material-ui/core/Input';
+import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import Select from "@material-ui/core/Select/Select";
+import FormControl from "@material-ui/core/FormControl/FormControl";
+import InputLabel from "@material-ui/core/InputLabel/InputLabel";
+import CustomTableCell from "./styles";
+
 
 class ProjectList extends Component {
     constructor() {
         super();
         this.state = {
             projects: [],
-            languages: []
+            languages: [],
+            baseLanguage: "",
+            projectName: ""
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.baseLanguageSelect = React.createRef();
-        this.nameInput = React.createRef();
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
@@ -49,6 +55,9 @@ class ProjectList extends Component {
             .catch((error) => console.log(error));
     }
 
+    handleChange(event) {
+        this.setState({[event.target.name]: event.target.value});
+    }
 
     handleSubmit(event) {
         this.newProject();
@@ -57,9 +66,10 @@ class ProjectList extends Component {
 
     newProject() {
         var body = {
-            "baseLanguageCode": this.baseLanguageSelect.current.value,
-            "name": this.nameInput.current.value
+            "baseLanguageCode": this.state.baseLanguage,
+            "name": this.state.projectName
         };
+        console.log(body);
         fetch(process.env.REACT_APP_BACKEND_URL + '/project', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
@@ -97,32 +107,47 @@ class ProjectList extends Component {
             <div className="ProjectList" id="projectList">
                 <Table>
                     <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>BaseLanguage</TableCell>
-                        <TableCell>Languages</TableCell>
-                    </TableRow>
+                        <TableRow>
+                            <CustomTableCell>Name</CustomTableCell>
+                            <CustomTableCell>BaseLanguage</CustomTableCell>
+                            <CustomTableCell>Languages</CustomTableCell>
+                        </TableRow>
                     </TableHead>
                     <TableBody>
-                    {this.state.projects.map(project =>
-                        <TableRow key={project.Id} id={project.Id} onClick={this.navigateToProject.bind(this, project.Id)}>
-                            <TableCell>{project.Name}</TableCell>
-                            <TableCell>{project.BaseLanguage.Name}</TableCell>
-                            <TableCell>{project.Languages.map(language => language.Name)}</TableCell>
-                        </TableRow>
-                    )}
+                        {this.state.projects.map(project =>
+                            <TableRow key={project.Id} id={project.Id}
+                                      onClick={this.navigateToProject.bind(this, project.Id)}>
+                                <CustomTableCell>{project.Name}</CustomTableCell>
+                                <CustomTableCell>{project.BaseLanguage.Name}</CustomTableCell>
+                                <CustomTableCell>{project.Languages.map(language => language.Name)}</CustomTableCell>
+                            </TableRow>
+                        )}
                     </TableBody>
                 </Table>
-                <div>
+                <div style={{marginTop: 20}}>
                     <form onSubmit={this.handleSubmit}>
-                        <Input type="text" name="projectName" ref={this.nameInput} required/>
-                        <select value={this.state.value} ref={this.baseLanguageSelect} name="baseLanguage" required>
-                            {this.state.languages.map(language =>
-                                <option key={language.IsoCode} value={language.IsoCode}>
-                                    {language.IsoCode} - {language.Name}
-                                </option>
-                            )}
-                        </select>
+                        <FormControl className="projectName">
+                            <InputLabel htmlFor="projectName">Project name</InputLabel>
+                            <Input type="text" inputProps={{
+                                name: 'projectName',
+                                id: 'projectName',
+                            }} value={this.state.projectName} onChange={this.handleChange} required/>
+                        </FormControl>
+                        <FormControl className="languageSelect">
+                            <InputLabel htmlFor="baseLanguage">Base language</InputLabel>
+                            <Select
+                                value={this.state.baseLanguage}
+                                onChange={this.handleChange}
+                                inputProps={{
+                                    name: 'baseLanguage',
+                                    id: 'baseLanguage',
+                                }}
+                            >
+                                {this.state.languages.map(language =>
+                                    <MenuItem key={language.IsoCode} value={language.IsoCode}>{language.Name}</MenuItem>
+                                )}
+
+                            </Select></FormControl>
                         <Button type="submit">Add project</Button>
                     </form>
                 </div>
