@@ -2,6 +2,18 @@ import {Component} from "react";
 import React from "react";
 import ReactDOM from "react-dom";
 import StringList from "./StringList";
+import ProjectTable from "./ProjectTable";
+import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Input from '@material-ui/core/Input';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
 
 export class Project extends Component {
@@ -146,25 +158,17 @@ export class Project extends Component {
                 {this.state.project.Name} <br/>
                 BaseLanguage: {this.state.project.BaseLanguage.IsoCode} - {this.state.project.BaseLanguage.Name} <br/>
                 Languages:
-                <ul className="Languages">
+                <List className="Languages">
                     {this.state.project.Languages.map(language =>
-                        <li key={language.IsoCode} onClick={this.showLanguage.bind(this, language.IsoCode)}>
-                            {language.IsoCode} - {language.Name}
-                        </li>
+                        <ListItem key={language.IsoCode} onClick={this.showLanguage.bind(this, language.IsoCode)}>
+                            <ListItemText primary={language.Name} secondary={language.IsoCode} />
+                        </ListItem>
                     )}
-                </ul><br/>
-                Identifiers:
-                <ul className="Identifiers">
-                    {this.state.project.Identifiers.map(identifier =>
-                        <li key={identifier.Id}>
-                            {identifier.Identifier}
-                        </li>
-                    )}
-                </ul>
+                </List><br/>
                 <form onSubmit={this.handleSubmit}>
-                    New Identifier: <input type="text" name="newIdentifier" value={this.state.newIdentifier}
+                    New Identifier: <Input type="text" name="newIdentifier" value={this.state.newIdentifier}
                                            onChange={this.handleChange} required/>
-                    <input type="submit"/>
+                    <Button type="submit">Add identifier</Button>
                 </form>
                 <div>
                     <form onSubmit={this.handleLanguageSubmit}>
@@ -175,9 +179,10 @@ export class Project extends Component {
                                 </option>
                             )}
                         </select>
-                        <button onClick={this.handleLanguageSubmit}>Add language to project</button>
+                        <Button onClick={this.handleLanguageSubmit}>Add language to project</Button>
                     </form>
                 </div>
+                <ProjectTable project={this.state.project}/>
             </div>
         );
     }

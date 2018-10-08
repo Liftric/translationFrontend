@@ -1,5 +1,12 @@
 import {Component} from "react";
 import React from "react";
+import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Input from '@material-ui/core/Input';
 
 class ProjectList extends Component {
     constructor() {
@@ -65,29 +72,29 @@ class ProjectList extends Component {
     render() {
         return (
             <div className="LanguageList" id="languageList">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>IsoCode</th>
-                        <th>Name</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <Table>
+                    <TableHead>
+                    <TableRow>
+                        <TableCell>IsoCode</TableCell>
+                        <TableCell>Name</TableCell>
+                    </TableRow>
+                    </TableHead>
+                    <TableBody>
                     {this.state.languages.map(language =>
-                        <tr key={language.IsoCode}>
-                            <td>{language.IsoCode}</td>
-                            <td>{language.Name}</td>
-                        </tr>
+                        <TableRow key={language.IsoCode}>
+                            <TableCell>{language.IsoCode}</TableCell>
+                            <TableCell>{language.Name}</TableCell>
+                        </TableRow>
                     )}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
                 <div>
                     <form onSubmit={this.handleSubmit}>
-                        Name: <input type="text" name="name" value={this.state.name} onChange={this.handleChange}
+                        Name: <Input type="text" name="name" value={this.state.name} onChange={this.handleChange}
                                      required/>
-                        Iso-Code: <input type="text" name="languageCode" value={this.state.languageCode}
+                        Iso-Code: <Input type="text" name="languageCode" value={this.state.languageCode}
                                          onChange={this.handleChange} required/>
-                        <input type="submit"/>
+                        <Button type="submit">Add language</Button>
                     </form>
                 </div>
             </div>

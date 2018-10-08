@@ -1,5 +1,13 @@
 import {Component} from "react";
 import React from "react";
+import Button from "@material-ui/core/Button/Button";
+import Table from "@material-ui/core/Table/Table";
+import TableHead from "@material-ui/core/TableHead/TableHead";
+import TableRow from "@material-ui/core/TableRow/TableRow";
+import TableCell from "@material-ui/core/TableCell/TableCell";
+import TableBody from "@material-ui/core/TableBody/TableBody";
+import Checkbox from '@material-ui/core/Checkbox';
+import Input from "@material-ui/core/Input/Input";
 
 
 class ImportFile extends Component {
@@ -46,7 +54,7 @@ class ImportFile extends Component {
         const identifier = target.name;
         let diffs = this.state.translationDiffs;
         diffs.forEach(function (diff) {
-            if(diff.Identifier === identifier) {
+            if (diff.Identifier === identifier) {
                 diff.ToChange = value;
             }
         });
@@ -57,10 +65,10 @@ class ImportFile extends Component {
         let projectId = this.props.projectId;
         let t = this
         this.state.translationDiffs.forEach(function (diff) {
-            if(diff.ToChange){
+            if (diff.ToChange) {
                 console.log(diff)
                 console.log(diff.TranslationNew)
-                if(diff.Create) {
+                if (diff.Create) {
                     var body = {
                         "projectId": projectId,
                         "identifier": diff.Identifier
@@ -82,7 +90,7 @@ class ImportFile extends Component {
                         })
                         .catch((error) => console.log(error));
                 }
-                if(diff.Update) {
+                if (diff.Update) {
                     t.updateTranslation(diff);
                 }
             }
@@ -115,34 +123,44 @@ class ImportFile extends Component {
 
 
     render() {
+        let diffTable;
+        if (this.state.translationDiffs.length > 0) {
+            diffTable = <div>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Identifier</TableCell>
+                            <TableCell>Create</TableCell>
+                            <TableCell>Update</TableCell>
+                            <TableCell>TranslationOld</TableCell>
+                            <TableCell>TranslationNew</TableCell>
+                            <TableCell>Update in backend</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {this.state.translationDiffs.map(diff =>
+                            <TableRow key={diff.Identifier}>
+                                <TableCell>{diff.Identifier}</TableCell>
+                                <TableCell><Checkbox checked={diff.Create} disabled/></TableCell>
+                                <TableCell><Checkbox checked={diff.Update} disabled/></TableCell>
+                                <TableCell><code>{diff.TranslationOld}</code></TableCell>
+                                <TableCell><code>{diff.TranslationNew}</code></TableCell>
+                                <TableCell><Checkbox name={diff.Identifier} checked={diff.ToChange}
+                                                  onChange={this.handleDiffToggle}/></TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+                <Button onClick={this.submit}>Submit changes to backend</Button>
+            </div>;
+        } else {
+            diffTable = ""
+        }
+
         return (
             <div className="ImportFile">
-                <input type="file" name="androidStringFile" onChange={this.handleChange} />
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Identifier</th>
-                        <th>Create</th>
-                        <th>Update</th>
-                        <th>TranslationOld</th>
-                        <th>TranslationNew</th>
-                        <th>Update in backend</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {this.state.translationDiffs.map(diff =>
-                        <tr key={diff.Identifier}>
-                            <td>{diff.Identifier}</td>
-                            <td><input type="checkbox" checked={diff.Create} disabled /></td>
-                            <td><input type="checkbox" checked={diff.Update} disabled /></td>
-                            <td><code>{diff.TranslationOld}</code></td>
-                            <td><code>{diff.TranslationNew}</code></td>
-                            <td><input name={diff.Identifier} type="checkbox" checked={diff.ToChange} onChange={this.handleDiffToggle} /></td>
-                        </tr>
-                    )}
-                    </tbody>
-                </table>
-                <button onClick={this.submit}>Submit changes to backend</button>
+                <Input type="file" name="androidStringFile" onChange={this.handleChange}/>
+                {diffTable}
             </div>
         )
     }

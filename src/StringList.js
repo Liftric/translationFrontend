@@ -2,6 +2,12 @@ import {Component} from "react";
 import React from "react";
 import String from "./String"
 import ImportFile from "./ImportFile"
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
 /**
  * @return {string}
  */
@@ -21,23 +27,23 @@ class StringList extends Component {
         return (
             <div className="StringList" id="stringList">
                 <ImportFile projectId={this.props.project.Id} languageCode={this.props.language} />
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Identifier</th>
-                        <th>String {this.props.project.BaseLanguage.Name}</th>
-                        <th>Approved</th>
-                        <th>Improvement needed</th>
-                        <th>Translation <TranslationLanguage project={this.props.project}
-                                                             language={this.props.language}/></th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <Table>
+                    <TableHead>
+                    <TableRow>
+                        <TableCell>Identifier</TableCell>
+                        <TableCell>String {this.props.project.BaseLanguage.Name}</TableCell>
+                        <TableCell>Approved</TableCell>
+                        <TableCell>Improvement needed</TableCell>
+                        <TableCell>Translation <TranslationLanguage project={this.props.project}
+                                                             language={this.props.language}/></TableCell>
+                    </TableRow>
+                    </TableHead>
+                    <TableBody>
                     {this.props.project.Identifiers.map(identifier =>
                         <String key={identifier.Id} identifier={identifier} language={this.props.language} baseLanguage={this.props.project.BaseLanguage.IsoCode}/>
                     )}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
         )
     }

@@ -3,6 +3,9 @@ import './App.css';
 import ProjectList from './ProjectList'
 import LanguageList from './LanguageList'
 import ReactDOM from "react-dom";
+import Button from '@material-ui/core/Button';
+
+
 
 class App extends Component {
 
@@ -28,15 +31,15 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
-                <div className="Navigation">
-                    <button onClick={this.showProjectList}>Projectlist</button>
-                    <button onClick={this.showLanguages}>Edit languages</button>
+                <div className="App">
+                    <div className="Navigation">
+                        <Button onClick={this.showProjectList}>Projectlist</Button>
+                        <Button onClick={this.showLanguages}>Edit languages</Button>
+                    </div>
+                    <div className="Content" id="content">
+                        <ProjectList/>
+                    </div>
                 </div>
-                <div className="Content" id="content">
-                    <ProjectList/>
-                </div>
-            </div>
         );
     }
 }

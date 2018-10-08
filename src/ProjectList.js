@@ -2,6 +2,13 @@ import {Component} from "react";
 import React from "react";
 import ReactDOM from "react-dom";
 import Project from "./Project"
+import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Input from '@material-ui/core/Input';
 
 class ProjectList extends Component {
     constructor() {
@@ -88,27 +95,27 @@ class ProjectList extends Component {
     render() {
         return (
             <div className="ProjectList" id="projectList">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>BaseLanguage</th>
-                        <th>Languages</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <Table>
+                    <TableHead>
+                    <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell>BaseLanguage</TableCell>
+                        <TableCell>Languages</TableCell>
+                    </TableRow>
+                    </TableHead>
+                    <TableBody>
                     {this.state.projects.map(project =>
-                        <tr key={project.Id} id={project.Id} onClick={this.navigateToProject.bind(this, project.Id)}>
-                            <td>{project.Name}</td>
-                            <td>{project.BaseLanguage.Name}</td>
-                            <td>{project.Languages.map(language => language.Name)}</td>
-                        </tr>
+                        <TableRow key={project.Id} id={project.Id} onClick={this.navigateToProject.bind(this, project.Id)}>
+                            <TableCell>{project.Name}</TableCell>
+                            <TableCell>{project.BaseLanguage.Name}</TableCell>
+                            <TableCell>{project.Languages.map(language => language.Name)}</TableCell>
+                        </TableRow>
                     )}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
                 <div>
                     <form onSubmit={this.handleSubmit}>
-                        <input type="text" name="projectName" ref={this.nameInput} required/>
+                        <Input type="text" name="projectName" ref={this.nameInput} required/>
                         <select value={this.state.value} ref={this.baseLanguageSelect} name="baseLanguage" required>
                             {this.state.languages.map(language =>
                                 <option key={language.IsoCode} value={language.IsoCode}>
@@ -116,7 +123,7 @@ class ProjectList extends Component {
                                 </option>
                             )}
                         </select>
-                        <input type="submit"/>
+                        <Button type="submit">Add project</Button>
                     </form>
                 </div>
             </div>

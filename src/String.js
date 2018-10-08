@@ -1,5 +1,9 @@
 import {Component} from "react";
 import React from "react";
+import TableRow from "@material-ui/core/TableRow/TableRow";
+import Button from "@material-ui/core/Button/Button";
+import TableCell from "@material-ui/core/TableCell/TableCell";
+import Textarea from "@material-ui/core/InputBase/Textarea";
 
 function TranslationString(props) {
     var translation = props.translation || null;
@@ -54,7 +58,6 @@ class String extends Component {
                 }
             }
         }
-
     }
 
     baseTranslation() {
@@ -110,16 +113,16 @@ class String extends Component {
 
     render() {
         return (
-            <tr key={this.state.identifier.Id}>
-                <td>{this.state.identifier.Identifier}</td>
-                <td><TranslationString translation={this.baseTranslation()}/></td>
-                <td><Approved translation={this.translation}/></td>
-                <td><NeedsImprovement translation={this.translation}/></td>
-                <td><textarea name="translationString" value={this.state.translation.Translation} onChange={this.handleTranslationChange}/></td>
-                <td>
-                    <button onClick={this.updateTranslation}>Update</button>
-                </td>
-            </tr>
+            <TableRow key={this.state.identifier.Id}>
+                <TableCell>{this.state.identifier.Identifier}</TableCell>
+                <TableCell><TranslationString translation={this.baseTranslation()}/></TableCell>
+                <TableCell><Approved translation={this.translation}/></TableCell>
+                <TableCell><NeedsImprovement translation={this.translation}/></TableCell>
+                <TableCell><Textarea name="translationString" value={this.state.translation.Translation} onChange={this.handleTranslationChange}/></TableCell>
+                <TableCell>
+                    <Button onClick={this.updateTranslation}>Update</Button>
+                </TableCell>
+            </TableRow>
         )
     }
 }
