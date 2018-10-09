@@ -1,6 +1,8 @@
-FROM nginx:stable-alpine
+FROM node:alpine
 
-COPY build/ /usr/share/nginx/html
+COPY build/ /app
+WORKDIR /app
+RUN yarn add serve
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 5000
+CMD ./node_modules/.bin/serve
