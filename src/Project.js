@@ -7,6 +7,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import {Redirect} from "react-router-dom";
+import Select from "@material-ui/core/Select/Select";
+import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 
 
 export class Project extends Component {
@@ -18,24 +20,17 @@ export class Project extends Component {
             newIdentifier: '',
             languages: [],
             languageTo: "",
-            redirect: false
+            redirect: false,
+            addLanguage: ""
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLanguageSubmit = this.handleLanguageSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
-
-        this.languageSelect = React.createRef();
     }
 
     handleChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
-        this.setState({
-            [name]: value
-        });
+        this.setState({[event.target.name]: event.target.value});
     }
 
     handleSubmit(event) {
@@ -46,7 +41,7 @@ export class Project extends Component {
     handleLanguageSubmit(event) {
         event.preventDefault();
         var body = {
-            "languageCode": this.languageSelect.current.value
+            "languageCode": this.state.addLanguage
         };
         fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/languages', {
             method: 'POST',
@@ -61,7 +56,11 @@ export class Project extends Component {
             })
             .then(project => {
                 this.setState({project});
-                this.setState({languages: this.diffLanguages(this.state.languages)});
+                let diff = this.diffLanguages(this.state.languages);
+                this.setState({languages: diff});
+                if (diff.length > 0) {
+                    this.setState({addLanguage: diff[0].IsoCode});
+                }
             })
             .catch((error) => console.log(error));
     }
@@ -121,7 +120,11 @@ export class Project extends Component {
                 return result.json();
             })
             .then(languages => {
-                this.setState({languages: this.diffLanguages(languages)});
+                let diff = this.diffLanguages(languages);
+                this.setState({languages: diff});
+                if (diff.length > 0) {
+                    this.setState({addLanguage: diff[0].IsoCode});
+                }
             })
             .catch((error) => console.log(error));
     }
@@ -147,18 +150,19 @@ export class Project extends Component {
     render() {
         if (this.state.redirect) {
             let url = '/project/' + this.state.projectId + "/" + this.state.languageTo;
-            return <Redirect push to={url} />;
+            return <Redirect push to={url}/>;
         }
         return (
             <div className="Project" id="project">
                 <h1>{this.state.project.Name}</h1>
-                <Button href={process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/csv'}>Export to CSV</Button><br/>
+                <Button href={process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/csv'}>Export to
+                    CSV</Button><br/>
                 BaseLanguage: {this.state.project.BaseLanguage.IsoCode} - {this.state.project.BaseLanguage.Name} <br/>
                 Languages:
                 <List className="Languages">
                     {this.state.project.Languages.map(language =>
                         <ListItem key={language.IsoCode} onClick={this.showLanguage.bind(this, language.IsoCode)}>
-                            <ListItemText primary={language.Name} secondary={language.IsoCode} />
+                            <ListItemText primary={language.Name} secondary={language.IsoCode}/>
                         </ListItem>
                     )}
                 </List><br/>
@@ -169,13 +173,20 @@ export class Project extends Component {
                 </form>
                 <div>
                     <form onSubmit={this.handleLanguageSubmit}>
-                        <select value={this.state.value} ref={this.languageSelect} name="language" required>
+                        New language:
+                        <Select
+                            value={this.state.addLanguage}
+                            onChange={this.handleChange}
+                            inputProps={{
+                                name: 'addLanguage',
+                                id: 'addLanguage',
+                            }}
+                            required
+                        >
                             {this.state.languages.map(language =>
-                                <option key={language.IsoCode} value={language.IsoCode}>
-                                    {language.IsoCode} - {language.Name}
-                                </option>
+                                <MenuItem key={language.IsoCode} value={language.IsoCode}>{language.Name}</MenuItem>
                             )}
-                        </select>
+                        </Select>
                         <Button onClick={this.handleLanguageSubmit}>Add language to project</Button>
                     </form>
                 </div>

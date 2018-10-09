@@ -102,7 +102,7 @@ class ProjectList extends Component {
     render() {
         if (this.state.redirect) {
             let url = '/project/' + this.state.projectId;
-            return <Redirect push to={url} />;
+            return <Redirect push to={url}/>;
         }
         return (
             <div className="ProjectList" id="projectList">
@@ -143,12 +143,14 @@ class ProjectList extends Component {
                                     name: 'baseLanguage',
                                     id: 'baseLanguage',
                                 }}
+                                required
                             >
                                 {this.state.languages.map(language =>
                                     <MenuItem key={language.IsoCode} value={language.IsoCode}>{language.Name}</MenuItem>
                                 )}
 
-                            </Select></FormControl>
+                            </Select>
+                        </FormControl>
                         <Button type="submit">Add project</Button>
                     </form>
                 </div>
