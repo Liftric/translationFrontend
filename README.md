@@ -4,9 +4,9 @@ Small frontend for the translation api 2 written in react.js.
 
 ## Environment variables
 
-You need to specify the following environment variables to get this project running (also for development):
+You need to specify the following environment variables to get this project running, they're stored in the .env files:
 
-* REACT_APP_BACKEND_URL (for development use "http://localhost:8080")
+* REACT_APP_BACKEND_URL (for development use "http://localhost:8080" and for production "/api" is used)
 
 ## Available Scripts
 
