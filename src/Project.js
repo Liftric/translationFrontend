@@ -152,6 +152,7 @@ export class Project extends Component {
         return (
             <div className="Project" id="project">
                 <h1>{this.state.project.Name}</h1>
+                <Button href={process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/csv'}>Export to CSV</Button><br/>
                 BaseLanguage: {this.state.project.BaseLanguage.IsoCode} - {this.state.project.BaseLanguage.Name} <br/>
                 Languages:
                 <List className="Languages">
