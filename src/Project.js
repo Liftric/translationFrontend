@@ -45,7 +45,6 @@ export class Project extends Component {
 
     handleLanguageSubmit(event) {
         event.preventDefault();
-        console.log("language added")
         var body = {
             "languageCode": this.languageSelect.current.value
         };

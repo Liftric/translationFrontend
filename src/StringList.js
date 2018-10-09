@@ -29,8 +29,6 @@ class StringList extends Component {
             language: props.match.params.language,
             project: {Languages: [], BaseLanguage: {}, Identifiers: []}
         };
-        console.log("stringlist");
-
     }
 
     componentDidMount() {

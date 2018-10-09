@@ -66,8 +66,6 @@ class ImportFile extends Component {
         let t = this
         this.state.translationDiffs.forEach(function (diff) {
             if (diff.ToChange) {
-                console.log(diff)
-                console.log(diff.TranslationNew)
                 if (diff.Create) {
                     var body = {
                         "projectId": projectId,
@@ -104,7 +102,6 @@ class ImportFile extends Component {
             "translation": diff.TranslationNew,
             "languageCode": this.props.languageCode
         };
-        console.log(body)
         fetch(process.env.REACT_APP_BACKEND_URL + '/translation', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},

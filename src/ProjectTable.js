@@ -63,7 +63,6 @@ class ProjectTable extends Component {
             var body = {
                 "identifier": identifier.NewIdentififer
             };
-            console.log(body)
             fetch(process.env.REACT_APP_BACKEND_URL + '/identifier/' + identifier.Id, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},

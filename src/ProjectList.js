@@ -70,7 +70,6 @@ class ProjectList extends Component {
             "baseLanguageCode": this.state.baseLanguage,
             "name": this.state.projectName
         };
-        console.log(body);
         fetch(process.env.REACT_APP_BACKEND_URL + '/project', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
