@@ -1,5 +1,26 @@
 body {
-  margin: 0;
-  padding: 0;
-  font-family: Asap, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: Asap, sans-serif;
+}
+
+.circleBase {
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+}
+
+.green {
+    background-color: green;
+    border: 3px solid darkgreen;
+}
+
+.red {
+    background-color: red;
+    border: 3px solid darkred;
+}
+
+.grey {
+    background-color: grey;
+    border: 3px solid darkgrey;
 }

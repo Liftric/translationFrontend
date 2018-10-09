@@ -106,7 +106,7 @@ class ProjectTable extends Component {
                         {this.state.project.Identifiers.map(identifier =>
                             <TableRow key={identifier.Id}>
                                 <TableCell>
-                                    <Input name="identifier" value={identifier.NewIdentififer}
+                                    <Input name="identifier" value={identifier.NewIdentififer} style={{minWidth: 250}}
                                            onChange={this.handleIdentifierChange.bind(this, identifier.Id)}/>
                                 </TableCell>
                                 {this.state.project.Languages.map(language =>

@@ -3,7 +3,7 @@ import React from "react";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import Button from "@material-ui/core/Button/Button";
 import TableCell from "@material-ui/core/TableCell/TableCell";
-import Textarea from "@material-ui/core/InputBase/Textarea";
+import TextField from "@material-ui/core/TextField/TextField";
 
 function TranslationString(props) {
     var translation = props.translation || null;
@@ -16,48 +16,48 @@ function TranslationString(props) {
 function Approved(props) {
     var translation = props.translation || null;
     if (translation) {
-        return translation.Approved
+        if(translation.Approved) {
+            return <div className="circleBase green"></div>
+        } else {
+            return <div className="circleBase red"></div>
+        }
     }
-    return ""
+    return <div className="circleBase grey"></div>
 }
 
 function NeedsImprovement(props) {
     var translation = props.translation || null;
     if (translation) {
-        return translation.NeedsImprovement
+        if(translation.NeedsImprovement) {
+            return <div className="circleBase red"></div>
+        } else {
+            return <div className="circleBase green"></div>
+        }
     }
-    return ""
+    return <div className="circleBase grey"></div>
 }
 
 class String extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             isCreated: false,
-            identifier: {Id: "", Identifier: ""},
+            identifier: props.identifier,
             translation: {Translation: "", Approved: false, NeedsImprovement: false},
-            language: ""
+            language: props.language
         };
 
-        this.handleTranslationChange = this.handleTranslationChange.bind(this);
-        this.updateTranslation = this.updateTranslation.bind(this);
-    }
-
-    componentDidMount() {
-        this.setState({
-            "identifier": this.props.identifier,
-            "language": this.props.language
-        });
-        if (this.props.identifier != null && this.props.identifier.Translations != null) {
-            for (var i = 0; i < this.props.identifier.Translations.length; i++) {
-                let translation = this.props.identifier.Translations[i];
-                if (translation.Language === this.props.language) {
-                    this.setState({
-                        "translation": translation
-                    });
+        if (props.identifier != null && props.identifier.Translations != null) {
+            for (var i = 0; i < props.identifier.Translations.length; i++) {
+                let translation = props.identifier.Translations[i];
+                if (translation.Language === props.language) {
+                    this.state.translation = translation;
                 }
             }
         }
+
+        this.handleTranslationChange = this.handleTranslationChange.bind(this);
+        this.updateTranslation = this.updateTranslation.bind(this);
     }
 
     baseTranslation() {
@@ -109,9 +109,10 @@ class String extends Component {
             <TableRow key={this.state.identifier.Id}>
                 <TableCell>{this.state.identifier.Identifier}</TableCell>
                 <TableCell><TranslationString translation={this.baseTranslation()}/></TableCell>
-                <TableCell><Approved translation={this.translation}/></TableCell>
-                <TableCell><NeedsImprovement translation={this.translation}/></TableCell>
-                <TableCell><Textarea name="translationString" value={this.state.translation.Translation} onChange={this.handleTranslationChange}/></TableCell>
+                <TableCell><Approved translation={this.state.translation}/></TableCell>
+                <TableCell><NeedsImprovement translation={this.state.translation}/></TableCell>
+                <TableCell><TextField multiline={true} name="translationString" value={this.state.translation.Translation}
+                                     onChange={this.handleTranslationChange} style={{minWidth: 400}}/></TableCell>
                 <TableCell>
                     <Button onClick={this.updateTranslation}>Update</Button>
                 </TableCell>
