@@ -29,8 +29,12 @@ class StringList extends Component {
         this.state = {
             projectId: props.match.params.id,
             language: props.match.params.language,
-            project: {Languages: [], BaseLanguage: {}, Identifiers: []}
+            project: {Languages: [], BaseLanguage: {}, Identifiers: []},
+            sortParam: "id",
+            desc: false
         };
+
+        this.sortBy = this.sortBy.bind(this);
     }
 
     componentDidMount() {
@@ -47,33 +51,168 @@ class StringList extends Component {
             .catch((error) => console.log(error));
     }
 
+    sortBy(property) {
+        let language = this.state.language;
+        let project = this.state.project;
+        let baseLanguage = project.BaseLanguage.IsoCode;
+        var identifiers = project.Identifiers;
+        var desc = true;
+        if (this.state.sortParam === property) {
+            desc = !this.state.desc
+        }
+        switch (property) {
+            case "identifier":
+                identifiers.sort(function (a, b) {
+                    if (desc) {
+                        return a.Identifier.localeCompare(b.Identifier);
+                    } else {
+                        return b.Identifier.localeCompare(a.Identifier);
+                    }
+                });
+                break;
+            case "baselanguage":
+                identifiers.sort(function (a, b) {
+                    return compareTranslationStrings(a, b, baseLanguage, desc);
+                });
+                break;
+            case "approved":
+                identifiers.sort(function (a, b) {
+                    return compareApproved(a, b, language, desc);
+                });
+                break;
+            case "improvementNeeded":
+                identifiers.sort(function (a, b) {
+                    return compareNeedsImprovement(a, b, language, desc);
+                });
+                break;
+            case "translation":
+                identifiers.sort(function (a, b) {
+                    return compareTranslationStrings(a, b, language, desc);
+                });
+                break;
+            default:
+                identifiers.sort(function (a, b) {
+                    return a.Id - b.Id;
+                });
+        }
+        project.Identifiers = identifiers;
+        this.setState({
+            "project": project,
+            "sortParam": property,
+            "desc": desc
+        });
+    }
+
     render() {
         return (
             <div className="StringList" id="stringList">
                 <Link to={"/project/" + this.state.projectId}><Button>Back</Button></Link><br/>
-                <Button href={process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/android/' + this.state.language}>Download Android xml</Button>
-                <Button href={process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/ios/' + this.state.language}>Download iOS string file</Button>
-                <ImportFile projectId={this.state.project.Id} languageCode={this.state.language} />
+                <Button
+                    href={process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/android/' + this.state.language}>Download
+                    Android xml</Button>
+                <Button
+                    href={process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/ios/' + this.state.language}>Download
+                    iOS string file</Button>
+                <ImportFile projectId={this.state.project.Id} languageCode={this.state.language}/>
                 <Table>
                     <TableHead>
-                    <TableRow>
-                        <TableCell>Identifier</TableCell>
-                        <TableCell>String {this.state.project.BaseLanguage.Name}</TableCell>
-                        <TableCell>Approved</TableCell>
-                        <TableCell>Improvement needed</TableCell>
-                        <TableCell>Translation <TranslationLanguage project={this.state.project}
-                                                             language={this.state.language}/></TableCell>
-                    </TableRow>
+                        <TableRow>
+                            <TableCell onClick={this.sortBy.bind(this, "identifier")}>Identifier</TableCell>
+                            <TableCell
+                                onClick={this.sortBy.bind(this, "baselanguage")}>String {this.state.project.BaseLanguage.Name}</TableCell>
+                            <TableCell onClick={this.sortBy.bind(this, "approved")}>Approved</TableCell>
+                            <TableCell onClick={this.sortBy.bind(this, "improvementNeeded")}>Improvement
+                                needed</TableCell>
+                            <TableCell onClick={this.sortBy.bind(this, "translation")}>Translation <TranslationLanguage
+                                project={this.state.project}
+                                language={this.state.language}/></TableCell>
+                        </TableRow>
                     </TableHead>
                     <TableBody>
-                    {this.state.project.Identifiers.map(identifier =>
-                        <String key={identifier.Id} identifier={identifier} language={this.state.language} baseLanguage={this.state.project.BaseLanguage.IsoCode}/>
-                    )}
+                        {this.state.project.Identifiers.map(identifier =>
+                            <String key={identifier.Id} identifier={identifier} language={this.state.language}
+                                    baseLanguage={this.state.project.BaseLanguage.IsoCode}/>
+                        )}
                     </TableBody>
                 </Table>
             </div>
         )
     }
+}
+
+function compareNeedsImprovement(identifierA, identifierB, language, desc) {
+    let translationA = getTranslation(identifierA, language);
+    let translationB = getTranslation(identifierB, language);
+    let translationNull = checkForNull(translationA, translationB, desc);
+    if (translationNull !== 0) {
+        return translationNull
+    }
+    if (desc) {
+        return (translationA.ImprovementNeeded === translationB.ImprovementNeeded) ? 0 : translationA.ImprovementNeeded ? -1 : 1;
+    } else {
+        return (translationA.ImprovementNeeded === translationB.ImprovementNeeded) ? 0 : translationB.ImprovementNeeded ? -1 : 1;
+    }
+}
+
+function compareApproved(identifierA, identifierB, language, desc) {
+    let translationA = getTranslation(identifierA, language);
+    let translationB = getTranslation(identifierB, language);
+    let translationNull = checkForNull(translationA, translationB, desc);
+    if (translationNull !== 0) {
+        return translationNull
+    }
+    if (desc) {
+        return (translationA.Approved === translationB.Approved) ? 0 : translationA.Approved ? -1 : 1;
+    } else {
+        return (translationA.Approved === translationB.Approved) ? 0 : translationB.Approved ? -1 : 1;
+    }
+}
+
+function checkForNull(translationA, translationB, desc) {
+    if (translationA === null && translationB === null) {
+        return 0
+    } else if (translationA === null && translationB != null) {
+        if (desc) {
+            return -1;
+        } else {
+            return 1;
+        }
+    } else if (translationB === null && translationA != null) {
+        if (desc) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+    return 0;
+}
+
+function compareTranslationStrings(identifierA, identifierB, language, desc) {
+    let translationA = getTranslation(identifierA, language);
+    let translationB = getTranslation(identifierB, language);
+    var translationStringA = "";
+    if (translationA != null) {
+        translationStringA = translationA.Translation;
+    }
+    var translationStringB = "";
+    if (translationB != null) {
+        translationStringB = translationB.Translation;
+    }
+    if (desc) {
+        return translationStringA.localeCompare(translationStringB);
+    } else {
+        return translationStringB.localeCompare(translationStringA);
+    }
+}
+
+function getTranslation(identifier, language) {
+    for (var i = 0; i < identifier.Translations.length; i++) {
+        let translation = identifier.Translations[i];
+        if (translation.Language === language) {
+            return translation;
+        }
+    }
+    return null;
 }
 
 export default StringList
