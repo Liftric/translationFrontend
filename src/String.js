@@ -16,10 +16,10 @@ function TranslationString(props) {
 function Approved(props) {
     var translation = props.translation || null;
     if (translation) {
-        if(translation.Approved) {
+        if (translation.Approved) {
             return <div className="circleBase green"></div>
         } else {
-            return <div className="circleBase red"></div>
+            return <div className="circleBase red" onClick={props.onClick}></div>
         }
     }
     return <div className="circleBase grey"></div>
@@ -28,10 +28,10 @@ function Approved(props) {
 function NeedsImprovement(props) {
     var translation = props.translation || null;
     if (translation) {
-        if(translation.NeedsImprovement) {
-            return <div className="circleBase red"></div>
+        if (translation.ImprovementNeeded) {
+            return <div className="circleBase red" onClick={props.onClick}></div>
         } else {
-            return <div className="circleBase green"></div>
+            return <div className="circleBase green" onClick={props.onClick}></div>
         }
     }
     return <div className="circleBase grey"></div>
@@ -43,7 +43,7 @@ class String extends Component {
         this.state = {
             isCreated: false,
             identifier: props.identifier,
-            translation: {Translation: "", Approved: false, NeedsImprovement: false},
+            translation: {Translation: "", Approved: false, ImprovementNeeded: false, Id: 0},
             language: props.language
         };
 
@@ -58,6 +58,8 @@ class String extends Component {
 
         this.handleTranslationChange = this.handleTranslationChange.bind(this);
         this.updateTranslation = this.updateTranslation.bind(this);
+        this.toggleNeedsImprovement = this.toggleNeedsImprovement.bind(this);
+        this.setApproved = this.setApproved.bind(this);
     }
 
     baseTranslation() {
@@ -74,12 +76,9 @@ class String extends Component {
     }
 
     handleTranslationChange(event) {
-        const target = event.target;
-        const value = target.value;
-
-        this.setState({
-            "translation": {"Translation": value}
-        });
+        let translation = this.state.translation;
+        translation.Translation = event.target.value;
+        this.setState({"translation": translation});
     }
 
     updateTranslation() {
@@ -99,6 +98,48 @@ class String extends Component {
                 }
                 return result.json()
             })
+            .then(result => {
+                this.setState({"translation": result});
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+    }
+
+    toggleNeedsImprovement() {
+        console.log(this.state.translation)
+        fetch(process.env.REACT_APP_BACKEND_URL + '/translation/improvement/' + this.state.translation.Id, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        })
+            .then(result => {
+                if (!result.ok) {
+                    throw Error(result.statusText);
+                }
+                let translation = this.state.translation;
+                translation.ImprovementNeeded = !translation.ImprovementNeeded;
+                this.setState({translation: translation});
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+    }
+
+    setApproved() {
+        console.log(this.state.translation)
+        console.log(process.env.REACT_APP_BACKEND_URL + '/translation/approve/' + this.state.translation.Id)
+        fetch(process.env.REACT_APP_BACKEND_URL + '/translation/approve/' + this.state.translation.Id, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        })
+            .then(result => {
+                if (!result.ok) {
+                    throw Error(result.statusText);
+                }
+                let translation = this.state.translation;
+                translation.Approved = true;
+                this.setState({translation: translation});
+            })
             .catch((error) => {
                 console.log(error)
             });
@@ -109,10 +150,12 @@ class String extends Component {
             <TableRow key={this.state.identifier.Id}>
                 <TableCell>{this.state.identifier.Identifier}</TableCell>
                 <TableCell><TranslationString translation={this.baseTranslation()}/></TableCell>
-                <TableCell><Approved translation={this.state.translation}/></TableCell>
-                <TableCell><NeedsImprovement translation={this.state.translation}/></TableCell>
-                <TableCell><TextField multiline={true} name="translationString" value={this.state.translation.Translation}
-                                     onChange={this.handleTranslationChange} style={{minWidth: 400}}/></TableCell>
+                <TableCell><Approved translation={this.state.translation} onClick={this.setApproved}/></TableCell>
+                <TableCell><NeedsImprovement translation={this.state.translation}
+                                             onClick={this.toggleNeedsImprovement}/></TableCell>
+                <TableCell><TextField multiline={true} name="translationString"
+                                      value={this.state.translation.Translation}
+                                      onChange={this.handleTranslationChange} style={{minWidth: 400}}/></TableCell>
                 <TableCell>
                     <Button onClick={this.updateTranslation}>Update</Button>
                 </TableCell>

@@ -8,6 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from "@material-ui/core/Button/Button";
+import {Link} from "react-router-dom";
 
 /**
  * @return {string}
@@ -49,6 +50,7 @@ class StringList extends Component {
     render() {
         return (
             <div className="StringList" id="stringList">
+                <Link to={"/project/" + this.state.projectId}><Button>Back</Button></Link><br/>
                 <Button href={process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/android/' + this.state.language}>Download Android xml</Button>
                 <Button href={process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/ios/' + this.state.language}>Download iOS string file</Button>
                 <ImportFile projectId={this.state.project.Id} languageCode={this.state.language} />
