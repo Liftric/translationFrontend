@@ -16,7 +16,9 @@ class ImportFile extends Component {
         super();
 
         this.state = {
-            translationDiffs: []
+            translationDiffs: [],
+            sortParam: "id",
+            desc: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -118,6 +120,72 @@ class ImportFile extends Component {
             });
     }
 
+    sort(param) {
+        var translationDiffs = this.state.translationDiffs;
+        var desc = true;
+        if (this.state.sortParam === param) {
+            desc = !this.state.desc
+        }
+        switch (param) {
+            case "Identifier":
+                translationDiffs.sort(function (a, b) {
+                    return a.Identifier.localeCompare(b.Identifier);
+                });
+                if(desc) {
+                    translationDiffs.reverse();
+                }
+                break;
+            case "Create":
+                translationDiffs.sort(function (a, b) {
+                    return (a.Create === b.Create) ? 0 : a.Create ? -1 : 1;
+                });
+                if(desc) {
+                    translationDiffs.reverse();
+                }
+                break;
+            case "Update":
+                translationDiffs.sort(function (a, b) {
+                    return (a.Update === b.Update) ? 0 : a.Update ? -1 : 1;
+                });
+                if(desc) {
+                    translationDiffs.reverse();
+                }
+                break;
+            case "TranslationOld":
+                translationDiffs.sort(function (a, b) {
+                    return a.TranslationOld.localeCompare(b.TranslationOld);
+                });
+                if(desc) {
+                    translationDiffs.reverse();
+                }
+                break;
+            case "TranslationNew":
+                translationDiffs.sort(function (a, b) {
+                    return a.TranslationNew.localeCompare(b.TranslationNew);
+                });
+                if(desc) {
+                    translationDiffs.reverse();
+                }
+                break;
+            case "Checkbox":
+                translationDiffs.sort(function (a, b) {
+                    return (a.ToChange === b.ToChange) ? 0 : a.ToChange ? -1 : 1;
+                });
+                if(desc) {
+                    translationDiffs.reverse();
+                }
+                break;
+            default:
+                translationDiffs.sort(function (a, b) {
+                    return a.Id - b.Id;
+                });
+        }
+        this.setState({
+            "translationDiffs": translationDiffs,
+            "sortParam": param,
+            "desc": desc
+        });
+    }
 
     render() {
         let diffTable;
@@ -126,12 +194,12 @@ class ImportFile extends Component {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Identifier</TableCell>
-                            <TableCell>Create</TableCell>
-                            <TableCell>Update</TableCell>
-                            <TableCell>TranslationOld</TableCell>
-                            <TableCell>TranslationNew</TableCell>
-                            <TableCell>Update in backend</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "Identifier")}>Identifier</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "Create")}>Create</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "Update")}>Update</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "TranslationOld")}>TranslationOld</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "TranslationNew")}>TranslationNew</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "Checkbox")}>Update in backend</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
