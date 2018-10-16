@@ -87,6 +87,34 @@ class ProjectTable extends Component {
         });
     }
 
+    deleteIdentifier(id) {
+        let project = this.state.project;
+        var index = -1;
+
+        project.Identifiers.forEach(function (identifier, i) {
+            if (identifier.Id === id) {
+                index = i;
+                fetch(process.env.REACT_APP_BACKEND_URL + '/identifier/' + identifier.Id, {
+                    method: 'DELETE'
+                })
+                    .then(result => {
+                        if (!result.ok) {
+                            throw Error(result.statusText);
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    });
+            }
+        });
+        if (index > -1) {
+            project.Identifiers.splice(index, 1);
+        }
+        this.setState({
+            project: project
+        });
+    }
+
     render() {
         return (
             <div>
@@ -100,6 +128,7 @@ class ProjectTable extends Component {
                                     {language.Name}
                                 </TableCell>
                             )}
+                            <TableCell/>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -110,10 +139,12 @@ class ProjectTable extends Component {
                                            onChange={this.handleIdentifierChange.bind(this, identifier.Id)}/>
                                 </TableCell>
                                 {this.state.project.Languages.map(language =>
-                                    <TableCell key={identifier.id + language.IsoCode}>
+                                    <TableCell key={identifier.Id + language.IsoCode}>
                                         <TranslationString identifier={identifier} language={language.IsoCode}/>
                                     </TableCell>
                                 )}
+                                <TableCell><Button
+                                    onClick={this.deleteIdentifier.bind(this, identifier.Id)}>Delete</Button></TableCell>
                             </TableRow>
                         )}
                     </TableBody>
