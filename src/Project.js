@@ -161,7 +161,8 @@ export class Project extends Component {
                 Languages:
                 <List className="Languages">
                     {this.state.project.Languages.map(language =>
-                        <ListItem key={language.IsoCode} onClick={this.showLanguage.bind(this, language.IsoCode)}>
+                        <ListItem key={language.IsoCode} onClick={this.showLanguage.bind(this, language.IsoCode)}
+                                  style={{cursor: "pointer"}}>
                             <ListItemText primary={language.Name} secondary={language.IsoCode}/>
                         </ListItem>
                     )}

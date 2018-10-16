@@ -117,13 +117,13 @@ class StringList extends Component {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell onClick={this.sortBy.bind(this, "identifier")}>Identifier</TableCell>
+                            <TableCell onClick={this.sortBy.bind(this, "identifier")} style={{cursor: "pointer"}}>Identifier</TableCell>
                             <TableCell
-                                onClick={this.sortBy.bind(this, "baselanguage")}>String {this.state.project.BaseLanguage.Name}</TableCell>
-                            <TableCell onClick={this.sortBy.bind(this, "approved")}>Approved</TableCell>
-                            <TableCell onClick={this.sortBy.bind(this, "improvementNeeded")}>Improvement
+                                onClick={this.sortBy.bind(this, "baselanguage")} style={{cursor: "pointer"}}>String {this.state.project.BaseLanguage.Name}</TableCell>
+                            <TableCell onClick={this.sortBy.bind(this, "approved")} style={{cursor: "pointer"}}>Approved</TableCell>
+                            <TableCell onClick={this.sortBy.bind(this, "improvementNeeded")} style={{cursor: "pointer"}}>Improvement
                                 needed</TableCell>
-                            <TableCell onClick={this.sortBy.bind(this, "translation")}>Translation <TranslationLanguage
+                            <TableCell onClick={this.sortBy.bind(this, "translation")} style={{cursor: "pointer"}}>Translation <TranslationLanguage
                                 project={this.state.project}
                                 language={this.state.language}/></TableCell>
                         </TableRow>

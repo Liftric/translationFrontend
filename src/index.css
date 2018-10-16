@@ -24,3 +24,11 @@ body {
     background-color: grey;
     border: 3px solid darkgrey;
 }
+
+.languageBox {
+    background-color: gainsboro;
+    border-radius: 10%;
+    padding: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}

@@ -194,12 +194,12 @@ class ImportFile extends Component {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell onClick={this.sort.bind(this, "Identifier")}>Identifier</TableCell>
-                            <TableCell onClick={this.sort.bind(this, "Create")}>Create</TableCell>
-                            <TableCell onClick={this.sort.bind(this, "Update")}>Update</TableCell>
-                            <TableCell onClick={this.sort.bind(this, "TranslationOld")}>TranslationOld</TableCell>
-                            <TableCell onClick={this.sort.bind(this, "TranslationNew")}>TranslationNew</TableCell>
-                            <TableCell onClick={this.sort.bind(this, "Checkbox")}>Update in backend</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "Identifier")} style={{cursor: "pointer"}}>Identifier</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "Create")} style={{cursor: "pointer"}}>Create</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "Update")} style={{cursor: "pointer"}}>Update</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "TranslationOld")} style={{cursor: "pointer"}}>TranslationOld</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "TranslationNew")} style={{cursor: "pointer"}}>TranslationNew</TableCell>
+                            <TableCell onClick={this.sort.bind(this, "Checkbox")} style={{cursor: "pointer"}}>Update in backend</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

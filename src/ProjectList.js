@@ -116,11 +116,11 @@ class ProjectList extends Component {
                     </TableHead>
                     <TableBody>
                         {this.state.projects.map(project =>
-                            <TableRow key={project.Id} id={project.Id}
+                            <TableRow key={project.Id} id={project.Id} style={{cursor: "pointer"}}
                                       onClick={this.navigateToProject.bind(this, project.Id)}>
                                 <CustomTableCell>{project.Name}</CustomTableCell>
                                 <CustomTableCell>{project.BaseLanguage.Name}</CustomTableCell>
-                                <CustomTableCell>{project.Languages.map(language => language.Name)}</CustomTableCell>
+                                <CustomTableCell>{project.Languages.map(language => <span class="languageBox">{language.Name}</span>)}</CustomTableCell>
                             </TableRow>
                         )}
                     </TableBody>

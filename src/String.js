@@ -19,7 +19,7 @@ function Approved(props) {
         if (translation.Approved) {
             return <div className="circleBase green"></div>
         } else {
-            return <div className="circleBase red" onClick={props.onClick}></div>
+            return <div className="circleBase red" onClick={props.onClick} style={{cursor: "pointer"}}></div>
         }
     }
     return <div className="circleBase grey"></div>
@@ -29,9 +29,9 @@ function NeedsImprovement(props) {
     var translation = props.translation || null;
     if (translation) {
         if (translation.ImprovementNeeded) {
-            return <div className="circleBase red" onClick={props.onClick}></div>
+            return <div className="circleBase red" onClick={props.onClick} style={{cursor: "pointer"}}></div>
         } else {
-            return <div className="circleBase green" onClick={props.onClick}></div>
+            return <div className="circleBase green" onClick={props.onClick} style={{cursor: "pointer"}}></div>
         }
     }
     return <div className="circleBase grey"></div>
