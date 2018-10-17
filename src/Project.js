@@ -67,7 +67,7 @@ export class Project extends Component {
 
     newIdentifier() {
         var body = {
-            "projectId": this.state.projectId,
+            "projectId": parseInt(this.state.projectId, 10),
             "identifier": this.state.newIdentifier
         };
         fetch(process.env.REACT_APP_BACKEND_URL + '/identifier', {

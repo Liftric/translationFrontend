@@ -120,7 +120,7 @@ class ProjectList extends Component {
                                       onClick={this.navigateToProject.bind(this, project.Id)}>
                                 <CustomTableCell>{project.Name}</CustomTableCell>
                                 <CustomTableCell>{project.BaseLanguage.Name}</CustomTableCell>
-                                <CustomTableCell>{project.Languages.map(language => <span class="languageBox">{language.Name}</span>)}</CustomTableCell>
+                                <CustomTableCell>{project.Languages.map(language => <span key={language.IsoCode} className="languageBox">{language.Name}</span>)}</CustomTableCell>
                             </TableRow>
                         )}
                     </TableBody>
