@@ -106,6 +106,8 @@ class StringList extends Component {
     render() {
         return (
             <div className="StringList" id="stringList">
+                <h2>{this.state.project.Name} - <TranslationLanguage project={this.state.project}
+                                                                     language={this.state.language}/></h2>
                 <Link to={"/project/" + this.state.projectId}><Button>Back</Button></Link><br/>
                 <Button
                     href={process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/android/' + this.state.language}>Download
@@ -117,15 +119,20 @@ class StringList extends Component {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell onClick={this.sortBy.bind(this, "identifier")} style={{cursor: "pointer"}}>Identifier</TableCell>
+                            <TableCell onClick={this.sortBy.bind(this, "identifier")}
+                                       style={{cursor: "pointer"}}>Identifier</TableCell>
                             <TableCell
-                                onClick={this.sortBy.bind(this, "baselanguage")} style={{cursor: "pointer"}}>String {this.state.project.BaseLanguage.Name}</TableCell>
-                            <TableCell onClick={this.sortBy.bind(this, "approved")} style={{cursor: "pointer"}}>Approved</TableCell>
-                            <TableCell onClick={this.sortBy.bind(this, "improvementNeeded")} style={{cursor: "pointer"}}>Improvement
-                                needed</TableCell>
-                            <TableCell onClick={this.sortBy.bind(this, "translation")} style={{cursor: "pointer"}}>Translation <TranslationLanguage
-                                project={this.state.project}
-                                language={this.state.language}/></TableCell>
+                                onClick={this.sortBy.bind(this, "baselanguage")}
+                                style={{cursor: "pointer"}}>String {this.state.project.BaseLanguage.Name}</TableCell>
+                            <TableCell onClick={this.sortBy.bind(this, "approved")}
+                                       style={{cursor: "pointer"}}>Approved</TableCell>
+                            <TableCell onClick={this.sortBy.bind(this, "improvementNeeded")}
+                                       style={{cursor: "pointer"}}>Improvement needed
+                            </TableCell>
+                            <TableCell onClick={this.sortBy.bind(this, "translation")} style={{cursor: "pointer"}}>
+                                Translation <TranslationLanguage project={this.state.project}
+                                                                 language={this.state.language}/>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
