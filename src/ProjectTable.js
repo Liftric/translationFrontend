@@ -12,9 +12,12 @@ import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 
+/**
+ * @return {string}
+ */
 function TranslationString(props) {
     if (props.identifier != null && props.identifier.Translations != null && props.language != null) {
-        for (var i = 0; i < props.identifier.Translations.length; i++) {
+        for (let i = 0; i < props.identifier.Translations.length; i++) {
             let translation = props.identifier.Translations[i];
             if (translation.Language === props.language) {
                 return translation.Translation;
@@ -48,7 +51,6 @@ class ProjectTable extends Component {
                 identifier.NewIdentififer = event.target.value;
                 identifier.Changed = true;
                 t.setState(t.state);
-                return;
             }
         });
     }
@@ -80,7 +82,7 @@ class ProjectTable extends Component {
     submitIdentifier() {
         let project = this.state.project;
         project.Identifiers.forEach(function (identifier) {
-            var body = {
+            const body = {
                 "identifier": identifier.NewIdentififer
             };
             fetch(process.env.REACT_APP_BACKEND_URL + '/identifier/' + identifier.Id, {
@@ -231,6 +233,9 @@ class ProjectTable extends Component {
     }
 }
 
+/**
+ * @return {string}
+ */
 function MoveButton(props) {
     if (props.projectId === props.newProjectId) {
         return ""

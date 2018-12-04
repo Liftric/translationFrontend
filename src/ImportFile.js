@@ -28,7 +28,7 @@ class ImportFile extends Component {
     }
 
     handleChange(event) {
-        var fd = new FormData();
+        const fd = new FormData();
         let file = event.target.files[0];
         fd.append('file', file);
 
@@ -65,11 +65,11 @@ class ImportFile extends Component {
 
     submit() {
         let projectId = this.props.projectId;
-        let t = this
+        let t = this;
         this.state.translationDiffs.forEach(function (diff) {
             if (diff.ToChange) {
                 if (diff.Create) {
-                    var body = {
+                    const body = {
                         "projectId": projectId,
                         "identifier": diff.Identifier
                     };
@@ -99,7 +99,7 @@ class ImportFile extends Component {
     }
 
     updateTranslation(diff) {
-        var body = {
+        const body = {
             "keyId": diff.IdentifierId,
             "translation": diff.TranslationNew,
             "languageCode": this.props.languageCode
@@ -121,7 +121,7 @@ class ImportFile extends Component {
     }
 
     sort(param) {
-        var translationDiffs = this.state.translationDiffs;
+        const translationDiffs = this.state.translationDiffs;
         var desc = true;
         if (this.state.sortParam === param) {
             desc = !this.state.desc

@@ -5,8 +5,11 @@ import Button from "@material-ui/core/Button/Button";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TextField from "@material-ui/core/TextField/TextField";
 
+/**
+ * @return {string}
+ */
 function TranslationString(props) {
-    var translation = props.translation || null;
+    const translation = props.translation || null;
     if (translation) {
         return translation.Translation
     }
@@ -14,27 +17,27 @@ function TranslationString(props) {
 }
 
 function Approved(props) {
-    var translation = props.translation || null;
+    const translation = props.translation || null;
     if (translation) {
         if (translation.Approved) {
-            return <div className="circleBase green"></div>
+            return <div className="circleBase green"/>
         } else {
-            return <div className="circleBase red" onClick={props.onClick} style={{cursor: "pointer"}}></div>
+            return <div className="circleBase red" onClick={props.onClick} style={{cursor: "pointer"}}/>
         }
     }
-    return <div className="circleBase grey"></div>
+    return <div className="circleBase grey"/>
 }
 
 function NeedsImprovement(props) {
-    var translation = props.translation || null;
+    const translation = props.translation || null;
     if (translation) {
         if (translation.ImprovementNeeded) {
-            return <div className="circleBase red" onClick={props.onClick} style={{cursor: "pointer"}}></div>
+            return <div className="circleBase red" onClick={props.onClick} style={{cursor: "pointer"}}/>
         } else {
-            return <div className="circleBase green" onClick={props.onClick} style={{cursor: "pointer"}}></div>
+            return <div className="circleBase green" onClick={props.onClick} style={{cursor: "pointer"}}/>
         }
     }
-    return <div className="circleBase grey"></div>
+    return <div className="circleBase grey"/>
 }
 
 class String extends Component {
@@ -48,7 +51,7 @@ class String extends Component {
         };
 
         if (props.identifier != null && props.identifier.Translations != null) {
-            for (var i = 0; i < props.identifier.Translations.length; i++) {
+            for (let i = 0; i < props.identifier.Translations.length; i++) {
                 let translation = props.identifier.Translations[i];
                 if (translation.Language === props.language) {
                     this.state.translation = translation;
@@ -66,7 +69,7 @@ class String extends Component {
         if (this.state.identifier == null || this.state.identifier.Translations == null) {
             return null;
         }
-        for (var i = 0; i < this.state.identifier.Translations.length; i++) {
+        for (let i = 0; i < this.state.identifier.Translations.length; i++) {
             let translation = this.state.identifier.Translations[i];
             if (translation.Language === this.props.baseLanguage) {
                 return translation;
@@ -82,7 +85,7 @@ class String extends Component {
     }
 
     updateTranslation() {
-        var body = {
+        const body = {
             "keyId": this.state.identifier.Id,
             "translation": this.state.translation.Translation,
             "languageCode": this.state.language
@@ -107,7 +110,7 @@ class String extends Component {
     }
 
     toggleNeedsImprovement() {
-        console.log(this.state.translation)
+        console.log(this.state.translation);
         fetch(process.env.REACT_APP_BACKEND_URL + '/translation/improvement/' + this.state.translation.Id, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}
@@ -126,8 +129,8 @@ class String extends Component {
     }
 
     setApproved() {
-        console.log(this.state.translation)
-        console.log(process.env.REACT_APP_BACKEND_URL + '/translation/approve/' + this.state.translation.Id)
+        console.log(this.state.translation);
+        console.log(process.env.REACT_APP_BACKEND_URL + '/translation/approve/' + this.state.translation.Id);
         fetch(process.env.REACT_APP_BACKEND_URL + '/translation/approve/' + this.state.translation.Id, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}

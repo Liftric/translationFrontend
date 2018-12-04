@@ -14,7 +14,7 @@ import {Link} from "react-router-dom";
  * @return {string}
  */
 function TranslationLanguage(props) {
-    for (var i = 0; i < props.project.Languages.length; i++) {
+    for (let i = 0; i < props.project.Languages.length; i++) {
         let lang = props.project.Languages[i];
         if (lang.IsoCode === props.language) {
             return lang.Name
@@ -206,7 +206,7 @@ function compareTranslationStrings(identifierA, identifierB, language, desc) {
 }
 
 function getTranslation(identifier, language) {
-    for (var i = 0; i < identifier.Translations.length; i++) {
+    for (let i = 0; i < identifier.Translations.length; i++) {
         let translation = identifier.Translations[i];
         if (translation.Language === language) {
             return translation;

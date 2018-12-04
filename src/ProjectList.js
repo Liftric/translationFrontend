@@ -66,7 +66,7 @@ class ProjectList extends Component {
     }
 
     newProject() {
-        var body = {
+        const body = {
             "baseLanguageCode": this.state.baseLanguage,
             "name": this.state.projectName
         };

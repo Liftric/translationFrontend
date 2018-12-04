@@ -40,7 +40,7 @@ export class Project extends Component {
 
     handleLanguageSubmit(event) {
         event.preventDefault();
-        var body = {
+        const body = {
             "languageCode": this.state.addLanguage
         };
         fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/languages', {
@@ -66,7 +66,7 @@ export class Project extends Component {
     }
 
     newIdentifier() {
-        var body = {
+        const body = {
             "projectId": parseInt(this.state.projectId, 10),
             "identifier": this.state.newIdentifier
         };
@@ -82,9 +82,12 @@ export class Project extends Component {
                 return result.json()
             })
             .then(identifier => {
-                var updatedProject = this.state.project;
+                const updatedProject = this.state.project;
                 updatedProject.Identifiers.push(identifier);
-                this.setState({project: updatedProject})
+                this.setState({
+                    project: updatedProject,
+                    newIdentifier: ""
+                })
             })
             .catch((error) => console.log(error));
     }
@@ -130,16 +133,16 @@ export class Project extends Component {
     }
 
     diffLanguages(languages) {
-        var diff = [];
-        var langKeys = [];
-        var projLangKeys = [];
-        for (var i = 0; i < languages.length; i++) {
+        const diff = [];
+        const langKeys = [];
+        const projLangKeys = [];
+        for (let i = 0; i < languages.length; i++) {
             langKeys.push(languages[i].IsoCode)
         }
-        for (var j = 0; j < this.state.project.Languages.length; j++) {
+        for (let j = 0; j < this.state.project.Languages.length; j++) {
             projLangKeys.push(this.state.project.Languages[j].IsoCode);
         }
-        for (var k = 0; k < languages.length; k++) {
+        for (let k = 0; k < languages.length; k++) {
             if (!projLangKeys.includes(langKeys[k])) {
                 diff.push(languages[k])
             }
@@ -180,7 +183,7 @@ export class Project extends Component {
 }
 
 function AddLanguage(props) {
-    if(props.project.state.languages.length === 0) {
+    if (props.project.state.languages.length === 0) {
         return <div/>
     }
 
