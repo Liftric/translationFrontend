@@ -167,34 +167,42 @@ export class Project extends Component {
                         </ListItem>
                     )}
                 </List><br/>
+                <AddLanguage project={this}/>
                 <form onSubmit={this.handleSubmit}>
                     New Identifier: <Input type="text" name="newIdentifier" value={this.state.newIdentifier}
                                            onChange={this.handleChange} required/>
                     <Button type="submit">Add identifier</Button>
                 </form>
-                <div>
-                    <form onSubmit={this.handleLanguageSubmit}>
-                        New language:
-                        <Select
-                            value={this.state.addLanguage}
-                            onChange={this.handleChange}
-                            inputProps={{
-                                name: 'addLanguage',
-                                id: 'addLanguage',
-                            }}
-                            required
-                        >
-                            {this.state.languages.map(language =>
-                                <MenuItem key={language.IsoCode} value={language.IsoCode}>{language.Name}</MenuItem>
-                            )}
-                        </Select>
-                        <Button onClick={this.handleLanguageSubmit}>Add language to project</Button>
-                    </form>
-                </div>
                 <ProjectTable project={this.state.project}/>
             </div>
         );
     }
+}
+
+function AddLanguage(props) {
+    if(props.project.state.languages.length === 0) {
+        return <div/>
+    }
+
+    return <div>
+        <form onSubmit={props.project.handleLanguageSubmit}>
+            New language:
+            <Select
+                value={props.project.state.addLanguage}
+                onChange={props.handleChange}
+                inputProps={{
+                    name: 'addLanguage',
+                    id: 'addLanguage',
+                }}
+                required
+            >
+                {props.project.state.languages.map(language =>
+                    <MenuItem key={language.IsoCode} value={language.IsoCode}>{language.Name}</MenuItem>
+                )}
+            </Select>
+            <Button onClick={props.project.handleLanguageSubmit}>Add language to project</Button>
+        </form>
+    </div>
 }
 
 export default Project;
