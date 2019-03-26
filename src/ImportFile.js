@@ -32,7 +32,7 @@ class ImportFile extends Component {
         let file = event.target.files[0];
         fd.append('file', file);
 
-        fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.props.projectId + '/android/' + this.props.languageCode, {
+        fetch(process.env.REACT_APP_BACKEND_URL + '/project/' + this.props.projectId + '/' + this.props.type + '/' + this.props.languageCode, {
             method: 'POST',
             body: file
         })
@@ -224,7 +224,7 @@ class ImportFile extends Component {
 
         return (
             <div className="ImportFile">
-                <Input type="file" name="androidStringFile" onChange={this.handleChange}/>
+                <Input type="file" name="fileInput" onChange={this.handleChange}/>
                 {diffTable}
             </div>
         )

@@ -115,7 +115,8 @@ class StringList extends Component {
                 <Button
                     href={process.env.REACT_APP_BACKEND_URL + '/project/' + this.state.projectId + '/ios/' + this.state.language}>Download
                     iOS string file</Button>
-                <ImportFile projectId={this.state.project.Id} languageCode={this.state.language}/>
+                Android XML: <ImportFile projectId={this.state.project.Id} languageCode={this.state.language} type="android" /> <br />
+                Simple CSV ($KEY;$TRANSLATION): <ImportFile projectId={this.state.project.Id} languageCode={this.state.language} type="excel" /> <br />
                 <Table>
                     <TableHead>
                         <TableRow>
